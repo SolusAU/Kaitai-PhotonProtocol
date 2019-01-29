@@ -26,6 +26,18 @@ types:
         repeat: expr
         repeat-expr: command_count
   command_header:
+    enums:
+      command_type:
+        0: none
+        1: acknowledge
+        2: connect
+        3: verify_connect
+        4: disconnect
+        5: ping
+        6: send_reliable
+        7: send_unreliable
+        8: send_reliable_fragment
+        12: server_time
     seq:
       - id: command_type
         type: u1
@@ -43,9 +55,20 @@ types:
       - id: unreliable_sequence_number
         type: u4
       - id: message
-        type: message
         size: command_length-16
+        type: message
   message:
+    enums:
+      message_type:
+        0: initialize
+        1: initialize_response
+        2: operation_request
+        3: operation_response
+        4: event
+        6: internal_operation_request
+        7: internal_operation_response
+        8: message
+        9: rawmessage
     seq:
       - id: message_signifier_byte
         contents: [0xF3]
@@ -62,6 +85,29 @@ types:
         repeat-expr: parameter_count
   
   parameter:
+    enums:
+      parameter_type:
+        0: unknown
+        42: 'null'
+        68: dictionary
+        97: string_array
+        98: byte
+        99: custom
+        100: double
+        101: event_data
+        102: float
+        104: hashtable
+        105: integer
+        107: short
+        108: long
+        110: integer_array
+        111: boolean
+        112: operation_response
+        113: operation_request
+        115: string
+        120: byte_array
+        121: array
+        122: object_array
     seq:
       - id: param_num
         type: u1
@@ -82,50 +128,4 @@ types:
         type: u4
       - id: bytebody
         size: length
-      
-enums:
-  command_type:
-    0: none
-    1: acknowledge
-    2: connect
-    3: verify_connect
-    4: disconnect
-    5: ping
-    6: send_reliable
-    7: send_unreliable
-    8: send_reliable_fragment
-    12: server_time
-    
-  message_type:
-    0: initialize
-    1: initialize_response
-    2: operation_request
-    3: operation_response
-    4: event
-    6: internal_operation_request
-    7: internal_operation_response
-    8: message
-    9: rawmessage
-    
-  parameter_type:
-    0: unknown
-    42: 'null'
-    68: dictionary
-    97: string_array
-    98: byte
-    99: custom
-    100: double
-    101: event_data
-    102: float
-    104: hashtable
-    105: integer
-    107: short
-    108: long
-    110: integer_array
-    111: boolean
-    112: operation_response
-    113: operation_request
-    115: string
-    120: byte_array
-    121: array
-    122: object_array
+
